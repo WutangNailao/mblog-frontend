@@ -150,5 +150,3 @@ const search = async () => {
   })
 }
 </script>
-
-<style scoped></style>

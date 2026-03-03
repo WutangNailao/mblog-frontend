@@ -3,23 +3,23 @@
     layout: friends
 </route>
 <template>
-  <div class="max-w-[567px] fc bg-white rounded ">
+  <div class="max-w-141.75 fc bg-white rounded ">
     <div class="relative mb-8">
-      <img class="w-full h-[250px]"
+      <img class="w-full h-62.5"
         src="https://images.unsplash.com/photo-1711299253442-de19d4dacaae?q=80&w=3500&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt="">
-      <div class="absolute right-2 bottom-[-40px]">
+      <div class="absolute right-2 -bottom-10">
         <div class="fc">
           <div class="fr items-center gap-4">
             <div class="text-lg font-bold text-white">{{ user.displayName }}</div>
-            <img :src="user.avatarUrl" class="w-[70px] h-[70px] rounded-xl">
+            <img :src="user.avatarUrl" class="w-17.5 h-17.5 rounded-xl">
           </div>
           <div class=" text-gray truncate w-full text-end text-xs mt-2">我怎么信仰 就怎么生活</div>
         </div>
       </div>
     </div>
 
-    <div class="fc divide-y-1 divide-coolGray/20 divide-solid ">
+    <div class="fc divide-y divide-coolGray/20 divide-solid ">
       <FriendsMemo :memo="memo" v-for="memo in state.memos" :key="memo.id" />
     </div>
   </div>

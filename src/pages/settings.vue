@@ -18,5 +18,3 @@
 <script setup lang="ts">
 const userinfo = useStorage('userinfo', { username: '', token: '', role: '' })
 </script>
-
-<style scoped></style>

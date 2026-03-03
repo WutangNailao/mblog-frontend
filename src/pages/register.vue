@@ -108,5 +108,3 @@ const doRegister = () => {
   })
 }
 </script>
-
-<style scoped></style>

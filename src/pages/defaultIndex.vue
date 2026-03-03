@@ -174,5 +174,3 @@ const searchDayDesc = computed(() => {
   return ''
 })
 </script>
-
-<style scoped></style>

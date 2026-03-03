@@ -76,5 +76,3 @@ const doLogin = () => {
   })
 }
 </script>
-
-<style scoped></style>
