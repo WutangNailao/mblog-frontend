@@ -3,6 +3,7 @@ import Components from 'unplugin-vue-components/vite'
 import Pages from 'vite-plugin-pages'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import Layouts from 'vite-plugin-vue-layouts'
+import tailwindcss from '@tailwindcss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
@@ -11,6 +12,7 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     VitePWA(),
     vue({
       template: {
