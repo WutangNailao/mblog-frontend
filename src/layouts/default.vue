@@ -103,25 +103,25 @@ onBeforeMount(async () => {
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .wrapper {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   margin-left: auto;
   margin-right: auto;
+}
 
-  .left {
-    width: 7rem;
-  }
+.wrapper .left {
+  width: 7rem;
+}
 
-  .middle {
-    flex: 1 1 0%;
-  }
+.wrapper .middle {
+  flex: 1 1 0%;
+}
 
-  .right {
-    width: 12.5rem;
-  }
+.wrapper .right {
+  width: 12.5rem;
 }
 
 @media screen and (min-width: 1024px) {
@@ -131,11 +131,9 @@ onBeforeMount(async () => {
 }
 
 @media screen and (max-width: 639px) {
-  .wrapper {
-    .left,
-    .right {
-      display: none;
-    }
+  .wrapper .left,
+  .wrapper .right {
+    display: none;
   }
 }
 </style>

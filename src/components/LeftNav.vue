@@ -111,7 +111,7 @@ const logout = () => {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .parent {
   display: flex;
   position: sticky;
@@ -120,28 +120,28 @@ const logout = () => {
   justify-content: flex-end;
   gap: 0.5rem;
   padding: 0.5rem;
+}
 
-  .item {
-    display: flex;
-    list-style: none;
-    cursor: pointer;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    font-size: 1.125rem;
-    letter-spacing: 3px;
+.parent .item {
+  display: flex;
+  list-style: none;
+  cursor: pointer;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 1.125rem;
+  letter-spacing: 3px;
+}
 
-    &:hover {
-      color: rgb(107 114 128);
-    }
+.parent .item:hover {
+  color: rgb(107 114 128);
+}
 
-    &.selected {
-      border-radius: 0.25rem;
-      background-color: rgb(229 231 235);
-      padding: 0.25rem 0.5rem;
-    }
-  }
+.parent .item.selected {
+  border-radius: 0.25rem;
+  background-color: rgb(229 231 235);
+  padding: 0.25rem 0.5rem;
 }
 
 :global(html.dark) .parent .item {

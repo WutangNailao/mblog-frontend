@@ -88,25 +88,25 @@ const opacity = (idx: number) => {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .custom-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(7, 1fr);
   grid-column-gap: 5px;
   grid-row-gap: 5px;
+}
 
-  .grid-item {
-    width: 1.25rem;
-    height: 1.25rem;
-    cursor: pointer;
-    border-radius: 0.25rem;
-    background-color: rgb(229 231 235);
+.custom-grid .grid-item {
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  background-color: rgb(229 231 235);
+}
 
-    &:hover {
-      background-color: rgb(156 163 175);
-    }
-  }
+.custom-grid .grid-item:hover {
+  background-color: rgb(156 163 175);
 }
 
 :global(html.dark) .custom-grid .grid-item {

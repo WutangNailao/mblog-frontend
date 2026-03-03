@@ -306,7 +306,7 @@ const editMemo = () => {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .memo {
   position: relative;
   margin-bottom: 1rem;
@@ -315,129 +315,126 @@ const editMemo = () => {
   border-radius: 0.25rem;
   background-color: #fff;
   box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
 
-  .source {
-    position: absolute;
-    right: 0.25rem;
-    bottom: 0.5rem;
-    z-index: 10;
-    font-size: 0.75rem;
-    color: rgb(209 213 219);
-  }
+.memo .source {
+  position: absolute;
+  right: 0.25rem;
+  bottom: 0.5rem;
+  z-index: 10;
+  font-size: 0.75rem;
+  color: rgb(209 213 219);
+}
 
-  &.top {
-    .header {
-      background-color: rgb(239 246 255);
-    }
-  }
+.memo.top .header {
+  background-color: rgb(239 246 255);
+}
 
-  .header {
-    display: flex;
-    gap: 0.5rem;
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
-    background-color: rgb(249 250 251);
-    padding: 0.5rem 1rem;
-    font-size: 0.75rem;
-    color: rgb(107 114 128);
+.memo .header {
+  display: flex;
+  gap: 0.5rem;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  background-color: rgb(249 250 251);
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  color: rgb(107 114 128);
+}
 
-    .author,
-    .visibility {
-      cursor: pointer;
+.memo .header .author,
+.memo .header .visibility {
+  cursor: pointer;
+}
 
-      &:hover {
-        color: rgb(96 165 250);
-      }
-    }
+.memo .header .author:hover,
+.memo .header .visibility:hover {
+  color: rgb(96 165 250);
+}
 
-    .fav {
-      display: flex;
-      cursor: pointer;
-      align-items: center;
-      gap: 0.25rem;
+.memo .header .fav {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.25rem;
+}
 
-      &:hover {
-        color: rgb(59 130 246);
-      }
-    }
+.memo .header .fav:hover {
+  color: rgb(59 130 246);
+}
 
-    .count {
-      display: flex;
-      cursor: pointer;
-      align-items: center;
-      gap: 0.25rem;
+.memo .header .count {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.25rem;
+}
 
-      &:hover {
-        color: rgb(59 130 246);
-      }
-    }
+.memo .header .count:hover {
+  color: rgb(59 130 246);
+}
 
-    .view {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
+.memo .header .view {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
 
-    .detail {
-      margin-left: auto;
-      cursor: pointer;
-      color: rgb(156 163 175);
+.memo .header .detail {
+  margin-left: auto;
+  cursor: pointer;
+  color: rgb(156 163 175);
+}
 
-      &:hover {
-        color: rgb(55 65 81);
-      }
-    }
-  }
+.memo .header .detail:hover {
+  color: rgb(55 65 81);
+}
 
-  .content {
-    padding: 0.5rem 1rem;
-    transition-duration: 300ms;
-    transition-property: all;
-    overflow-wrap: anywhere;
-    overflow: hidden;
-  }
+.memo .content {
+  padding: 0.5rem 1rem;
+  transition-duration: 300ms;
+  transition-property: all;
+  overflow-wrap: anywhere;
+  overflow: hidden;
+}
 
-  .imgs {
-    margin-bottom: 0.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-  }
+.memo .imgs {
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
 
-  .tags {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding-right: 0.5rem;
-    padding-bottom: 0.5rem;
-    padding-left: 0.5rem;
-    color: rgb(156 163 175);
+.memo .tags {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-right: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  color: rgb(156 163 175);
+}
 
-    .tag {
-      cursor: pointer;
-      border: 1px solid currentColor;
-      border-radius: 0.25rem;
-      padding: 0 0.5rem;
-      font-size: 0.5rem;
-      line-height: 0.75rem;
-      color: #18a058;
+.memo .tags .tag {
+  cursor: pointer;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  padding: 0 0.5rem;
+  font-size: 0.5rem;
+  line-height: 0.75rem;
+  color: #18a058;
+}
 
-      &:hover {
-        color: #36ad6a;
-      }
-    }
-  }
+.memo .tags .tag:hover {
+  color: #36ad6a;
 }
 
 @media screen and (max-width: 639px) {
-  .memo .header {
-    .fav,
-    .count,
-    .view {
-      display: none;
-    }
+  .memo .header .fav,
+  .memo .header .count,
+  .memo .header .view {
+    display: none;
   }
 }
 

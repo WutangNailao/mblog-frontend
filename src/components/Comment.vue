@@ -1,56 +1,56 @@
-<style scoped lang="scss">
+<style scoped>
 .comment {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   border-radius: 0.25rem;
   background-color: #fff;
+}
 
-  .head {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
-    background-color: rgb(241 245 249);
-    padding: 0.5rem;
-    font-size: 0.75rem;
-    color: rgb(107 114 128);
+.comment .head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  background-color: rgb(241 245 249);
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  color: rgb(107 114 128);
+}
 
-    .author {
-      cursor: pointer;
+.comment .head .author {
+  cursor: pointer;
+}
 
-      &:hover {
-        color: rgb(17 24 39);
-      }
-    }
+.comment .head .author:hover {
+  color: rgb(17 24 39);
+}
 
-    .approve {
-      cursor: pointer;
-      color: rgb(248 113 113);
+.comment .head .approve {
+  cursor: pointer;
+  color: rgb(248 113 113);
+}
 
-      &:hover {
-        color: rgb(185 28 28);
-      }
-    }
+.comment .head .approve:hover {
+  color: rgb(185 28 28);
+}
 
-    .right {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
+.comment .head .right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
 
-      .remove {
-        display: flex;
-        cursor: pointer;
-        align-items: center;
-        gap: 0.25rem;
+.comment .head .right .remove {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.25rem;
+}
 
-        &:hover {
-          color: rgb(37 99 235);
-        }
-      }
-    }
-  }
+.comment .head .right .remove:hover {
+  color: rgb(37 99 235);
 }
 
 :global(html.dark) .comment {

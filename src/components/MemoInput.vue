@@ -385,7 +385,7 @@ const deleteResource = (publicId: string) => {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 ::v-deep(.n-upload) {
   width: auto;
   display: flex;
@@ -399,10 +399,10 @@ const deleteResource = (publicId: string) => {
   cursor: pointer;
   color: rgb(185 28 28);
   font-weight: 500;
+}
 
-  &:hover {
-    color: rgb(248 113 113);
-  }
+.deleteBtn:hover {
+  color: rgb(248 113 113);
 }
 
 .progress-bar {

@@ -17,15 +17,15 @@ toggleDrauuBus.on(() => {
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .drauu {
   width: 100%;
   min-height: 400px;
   display: flex;
+}
 
-  #svg {
-    width: 100%;
-    flex: 1;
-  }
+.drauu #svg {
+  width: 100%;
+  flex: 1;
 }
 </style>
