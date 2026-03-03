@@ -105,18 +105,37 @@ onBeforeMount(async () => {
 
 <style scoped lang="scss">
 .wrapper {
-  @apply flex flex-col gap-2 lg:w-200 mx-auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-left: auto;
+  margin-right: auto;
 
   .left {
-    @apply w-28  lt-md:hidden;
+    width: 7rem;
   }
 
   .middle {
-    @apply flex-1;
+    flex: 1 1 0%;
   }
 
   .right {
-    @apply w-50  lt-md:hidden;
+    width: 12.5rem;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .wrapper {
+    width: 50rem;
+  }
+}
+
+@media screen and (max-width: 639px) {
+  .wrapper {
+    .left,
+    .right {
+      display: none;
+    }
   }
 }
 </style>

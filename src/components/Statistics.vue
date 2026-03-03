@@ -97,7 +97,19 @@ const opacity = (idx: number) => {
   grid-row-gap: 5px;
 
   .grid-item {
-    @apply w-5 h-5 cursor-pointer hover:bg-gray-400 bg-gray-200 rd dark:bg-gray-8;
+    width: 1.25rem;
+    height: 1.25rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    background-color: rgb(229 231 235);
+
+    &:hover {
+      background-color: rgb(156 163 175);
+    }
   }
+}
+
+:global(html.dark) .custom-grid .grid-item {
+  background-color: rgb(31 41 55);
 }
 </style>

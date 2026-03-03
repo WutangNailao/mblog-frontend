@@ -1,25 +1,60 @@
 <style scoped lang="scss">
 .comment {
-  @apply bg-white rd dark:bg-gray-7 my-2;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: #fff;
 
   .head {
-    @apply bg-slate-100 fr items-center rd-t p-2 text-gray-5 text-xs gap-2;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    background-color: rgb(241 245 249);
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    color: rgb(107 114 128);
 
     .author {
-      @apply cursor-pointer hover:text-gray-9;
+      cursor: pointer;
+
+      &:hover {
+        color: rgb(17 24 39);
+      }
     }
+
     .approve {
-      @apply cursor-pointer hover:text-red-7 text-red-4;
+      cursor: pointer;
+      color: rgb(248 113 113);
+
+      &:hover {
+        color: rgb(185 28 28);
+      }
     }
 
     .right {
-      @apply ml-auto fr gap-1 items-center;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
 
       .remove {
-        @apply fr gap-1 items-center cursor-pointer hover:text-blue-600;
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        gap: 0.25rem;
+
+        &:hover {
+          color: rgb(37 99 235);
+        }
       }
     }
   }
+}
+
+:global(html.dark) .comment {
+  background-color: rgb(55 65 81);
 }
 </style>
 <template>
@@ -106,5 +141,3 @@ const singleApproved = async () => {
   }
 }
 </script>
-
-<style scoped lang="scss"></style>

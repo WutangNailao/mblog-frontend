@@ -47,7 +47,7 @@
         v-if="userinfo.token && route.path === '/'"
       >
         <template #trigger>
-          <div class="detail" @click="popoverShow = !popoverShow"></div>
+          <div class="detail i-carbon:table" @click="popoverShow = !popoverShow"></div>
         </template>
         <div class="fc gap-1">
           <div
@@ -308,60 +308,150 @@ const editMemo = () => {
 
 <style scoped lang="scss">
 .memo {
-  @apply fc bg-white rd dark:bg-gray-7 dark:text-gray-4 mb-4 relative shadow-2xl;
+  position: relative;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.25rem;
+  background-color: #fff;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 
   .source {
-    @apply absolute right-1 bottom-2 text-xs text-gray-3 z-10;
+    position: absolute;
+    right: 0.25rem;
+    bottom: 0.5rem;
+    z-index: 10;
+    font-size: 0.75rem;
+    color: rgb(209 213 219);
   }
 
   &.top {
-    @apply shadow-2xl;
-
     .header {
-      @apply bg-blue-50;
+      background-color: rgb(239 246 255);
     }
   }
 
   .header {
-    @apply bg-gray-50 fr gap-2 text-xs py-2 px-4 text-gray-500 rd-t dark:bg-gray-5 dark:text-gray-9;
+    display: flex;
+    gap: 0.5rem;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    background-color: rgb(249 250 251);
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    color: rgb(107 114 128);
 
     .author,
     .visibility {
-      @apply cursor-pointer hover:text-blue-4;
+      cursor: pointer;
+
+      &:hover {
+        color: rgb(96 165 250);
+      }
     }
 
     .fav {
-      @apply fr items-center cursor-pointer hover:text-blue-5 gap-1 lt-md:hidden;
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+      gap: 0.25rem;
+
+      &:hover {
+        color: rgb(59 130 246);
+      }
     }
 
     .count {
-      @apply fr items-center gap-1 cursor-pointer hover:text-blue-5 lt-md:hidden;
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+      gap: 0.25rem;
+
+      &:hover {
+        color: rgb(59 130 246);
+      }
     }
 
     .view {
-      @apply fr items-center gap-1 lt-md:hidden;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
     }
+
     .detail {
-      @apply i-carbon:table ml-auto text-gray-400 cursor-pointer hover:text-gray-700;
+      margin-left: auto;
+      cursor: pointer;
+      color: rgb(156 163 175);
+
+      &:hover {
+        color: rgb(55 65 81);
+      }
     }
   }
 
   .content {
-    @apply py-2 px-4 transition-all transition-duration-300;
+    padding: 0.5rem 1rem;
+    transition-duration: 300ms;
+    transition-property: all;
     overflow-wrap: anywhere;
     overflow: hidden;
   }
 
   .imgs {
-    @apply fr gap-2 px-2 mb-2 flex-wrap;
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
   .tags {
-    @apply fr gap-2 text-gray-400 pb-2 px-2 items-center;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
+    color: rgb(156 163 175);
 
     .tag {
-      @apply cursor-pointer   hover:text-#36ad6a border b-solid rounded px-2 text-#18a058 text-2;
+      cursor: pointer;
+      border: 1px solid currentColor;
+      border-radius: 0.25rem;
+      padding: 0 0.5rem;
+      font-size: 0.5rem;
+      line-height: 0.75rem;
+      color: #18a058;
+
+      &:hover {
+        color: #36ad6a;
+      }
     }
   }
+}
+
+@media screen and (max-width: 639px) {
+  .memo .header {
+    .fav,
+    .count,
+    .view {
+      display: none;
+    }
+  }
+}
+
+:global(html.dark) .memo {
+  background-color: rgb(55 65 81);
+  color: rgb(156 163 175);
+}
+
+:global(html.dark) .memo.top .header {
+  background-color: rgb(239 246 255);
+}
+
+:global(html.dark) .memo .header {
+  background-color: rgb(107 114 128);
+  color: rgb(17 24 39);
 }
 </style>

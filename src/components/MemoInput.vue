@@ -140,7 +140,7 @@
             <div v-else>
               {{ img.fileName }}
             </div>
-            <div class="deleteBtn" @click="deleteResource(img.publicId)"></div>
+            <div class="deleteBtn i-carbon:close-filled" @click="deleteResource(img.publicId)"></div>
             <div class="progress-bar" v-if="img.progress && img.progress > 0 && img.progress !== 100">
               <n-progress type="line" :percentage="img.progress" :indicator-placement="'inside'" processing />
             </div>
@@ -392,11 +392,24 @@ const deleteResource = (publicId: string) => {
 }
 
 .deleteBtn {
-  @apply i-carbon:close-filled text-red-700 hover:text-red-400 cursor-pointer absolute top-0 right--2 fw-500 z-99;
+  position: absolute;
+  top: 0;
+  right: -0.5rem;
+  z-index: 99;
+  cursor: pointer;
+  color: rgb(185 28 28);
+  font-weight: 500;
+
+  &:hover {
+    color: rgb(248 113 113);
+  }
 }
 
 .progress-bar {
-  @apply absolute bottom-2 left-1 w-9/10;
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.25rem;
+  width: 90%;
 }
 emoji-picker {
   width: 400px;

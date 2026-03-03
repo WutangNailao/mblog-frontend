@@ -1,5 +1,256 @@
+@config "../tailwind.config.cjs";
+@import "tailwindcss";
+
 /* @import 'https://cdn.staticfile.org/lxgw-wenkai-screen-webfont/1.7.0/lxgwwenkaiscreen.min.css'; */
 
+@layer utilities {
+  .fc {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fr {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .rd {
+    border-radius: 0.25rem;
+  }
+
+  .rd-t {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+  }
+
+  .fw-500 {
+    font-weight: 500;
+  }
+
+  .fw-700 {
+    font-weight: 700;
+  }
+
+  .text-4 {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .text-2 {
+    font-size: 0.5rem;
+    line-height: 0.75rem;
+  }
+
+  .z-99 {
+    z-index: 99;
+  }
+
+  .w-9\/10 {
+    width: 90%;
+  }
+
+  .right--2 {
+    right: -0.5rem;
+  }
+
+  .bottom-shadow {
+    box-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.08), 0 4px 6px -4px rgb(15 23 42 / 0.08);
+  }
+
+  .hover-text-gray-700:hover {
+    color: rgb(55 65 81);
+  }
+
+  .ws-nowrap {
+    white-space: nowrap;
+  }
+
+  .gap-\\.5 {
+    gap: 0.125rem;
+  }
+}
+
+.bottom-10\% {
+  bottom: 10%;
+}
+
+.divide-y-1 > :not([hidden]) ~ :not([hidden]) {
+  border-top-width: 1px;
+}
+
+.divide-solid > :not([hidden]) ~ :not([hidden]) {
+  border-style: solid;
+}
+
+@media screen and (max-width: 639px) {
+  .lt-md\:hidden {
+    display: none;
+  }
+}
+
+[class^='i-carbon:'],
+[class*=' i-carbon:'] {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  vertical-align: middle;
+  background-color: currentColor;
+  -webkit-mask: var(--icon) no-repeat center / contain;
+  mask: var(--icon) no-repeat center / contain;
+}
+
+.i-carbon\:arrow-down {
+  --icon: url('https://api.iconify.design/carbon/arrow-down.svg');
+}
+
+.i-carbon\:arrow-up {
+  --icon: url('https://api.iconify.design/carbon/arrow-up.svg');
+}
+
+.i-carbon\:book {
+  --icon: url('https://api.iconify.design/carbon/book.svg');
+}
+
+.i-carbon\:chat {
+  --icon: url('https://api.iconify.design/carbon/chat.svg');
+}
+
+.i-carbon\:cloud-upload {
+  --icon: url('https://api.iconify.design/carbon/cloud-upload.svg');
+}
+
+.i-carbon\:close-filled {
+  --icon: url('https://api.iconify.design/carbon/close-filled.svg');
+}
+
+.i-carbon\:code {
+  --icon: url('https://api.iconify.design/carbon/code.svg');
+}
+
+.i-carbon\:data-table {
+  --icon: url('https://api.iconify.design/carbon/data-table.svg');
+}
+
+.i-carbon\:down-to-bottom {
+  --icon: url('https://api.iconify.design/carbon/down-to-bottom.svg');
+}
+
+.i-carbon\:edit {
+  --icon: url('https://api.iconify.design/carbon/edit.svg');
+}
+
+.i-carbon\:face-wink {
+  --icon: url('https://api.iconify.design/carbon/face-wink.svg');
+}
+
+.i-carbon\:favorite {
+  --icon: url('https://api.iconify.design/carbon/favorite.svg');
+}
+
+.i-carbon\:favorite-filled {
+  --icon: url('https://api.iconify.design/carbon/favorite-filled.svg');
+}
+
+.i-carbon\:home {
+  --icon: url('https://api.iconify.design/carbon/home.svg');
+}
+
+.i-carbon\:ibm-watson-tone-analyzer {
+  --icon: url('https://api.iconify.design/carbon/ibm-watson-tone-analyzer.svg');
+}
+
+.i-carbon\:image {
+  --icon: url('https://api.iconify.design/carbon/image.svg');
+}
+
+.i-carbon\:link {
+  --icon: url('https://api.iconify.design/carbon/link.svg');
+}
+
+.i-carbon\:list {
+  --icon: url('https://api.iconify.design/carbon/list.svg');
+}
+
+.i-carbon\:login {
+  --icon: url('https://api.iconify.design/carbon/login.svg');
+}
+
+.i-carbon\:logo-github {
+  --icon: url('https://api.iconify.design/carbon/logo-github.svg');
+}
+
+.i-carbon\:logout {
+  --icon: url('https://api.iconify.design/carbon/logout.svg');
+}
+
+.i-carbon\:maximize {
+  --icon: url('https://api.iconify.design/carbon/maximize.svg');
+}
+
+.i-carbon\:menu {
+  --icon: url('https://api.iconify.design/carbon/menu.svg');
+}
+
+.i-carbon\:moon {
+  --icon: url('https://api.iconify.design/carbon/moon.svg');
+}
+
+.i-carbon\:not-available {
+  --icon: url('https://api.iconify.design/carbon/not-available.svg');
+}
+
+.i-carbon\:person {
+  --icon: url('https://api.iconify.design/carbon/person.svg');
+}
+
+.i-carbon\:quotes {
+  --icon: url('https://api.iconify.design/carbon/quotes.svg');
+}
+
+.i-carbon\:rss {
+  --icon: url('https://api.iconify.design/carbon/rss.svg');
+}
+
+.i-carbon\:search {
+  --icon: url('https://api.iconify.design/carbon/search.svg');
+}
+
+.i-carbon\:settings {
+  --icon: url('https://api.iconify.design/carbon/settings.svg');
+}
+
+.i-carbon\:sun {
+  --icon: url('https://api.iconify.design/carbon/sun.svg');
+}
+
+.i-carbon\:table {
+  --icon: url('https://api.iconify.design/carbon/table.svg');
+}
+
+.i-carbon\:task {
+  --icon: url('https://api.iconify.design/carbon/task.svg');
+}
+
+.i-carbon\:task-view {
+  --icon: url('https://api.iconify.design/carbon/task-view.svg');
+}
+
+.i-carbon\:trash-can {
+  --icon: url('https://api.iconify.design/carbon/trash-can.svg');
+}
+
+.i-carbon\:up-to-top {
+  --icon: url('https://api.iconify.design/carbon/up-to-top.svg');
+}
+
+.i-carbon\:upgrade {
+  --icon: url('https://api.iconify.design/carbon/upgrade.svg');
+}
+
+.i-carbon\:view {
+  --icon: url('https://api.iconify.design/carbon/view.svg');
+}
 
 @font-face {
   font-family: MiSans;

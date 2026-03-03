@@ -113,14 +113,38 @@ const logout = () => {
 
 <style scoped lang="scss">
 .parent {
-  @apply fc p-2 gap-2 justify-end  sticky top-0;
+  display: flex;
+  position: sticky;
+  top: 0;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem;
+
   .item {
-    @apply cursor-pointer list-none fr gap-3 items-center hover:text-gray-500 dark:text-gray-4 justify-center text-lg;
+    display: flex;
+    list-style: none;
+    cursor: pointer;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 1.125rem;
     letter-spacing: 3px;
 
+    &:hover {
+      color: rgb(107 114 128);
+    }
+
     &.selected {
-      @apply bg-gray-2 px-2 py-1 rd;
+      border-radius: 0.25rem;
+      background-color: rgb(229 231 235);
+      padding: 0.25rem 0.5rem;
     }
   }
+}
+
+:global(html.dark) .parent .item {
+  color: rgb(156 163 175);
 }
 </style>
