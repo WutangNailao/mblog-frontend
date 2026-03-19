@@ -42,7 +42,7 @@
     "@vue/tsconfig": "^0.8.1",
     "eslint": "^9.35.0",
     "eslint-plugin-vue": "~10.4.0",
-    "naive-ui": "^2.43.2",
+    "primevue": "^4.4.1",
     "prettier": "^3.6.2",
     "tailwindcss": "^4.2.1",
     "typescript": "~5.8.3",

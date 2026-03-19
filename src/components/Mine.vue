@@ -1,7 +1,7 @@
 <template>
   <div class="fc bg-white p-2 rd gap-2 text-gray dark:bg-gray-7 dark:text-gray-4">
     <div class="fr gap-2 items-center justify-center">
-      <n-avatar round size="large" :src="user.avatarUrl" />
+      <Avatar shape="circle" size="large" :image="user.avatarUrl" />
       <div class="fc text-xs gap-1">
         <div>@{{ user.displayName }}</div>
         <div>{{ created }}</div>
@@ -15,6 +15,7 @@
 
 <script setup lang="ts">
 import type { User } from '@/types/user'
+import Avatar from 'primevue/avatar'
 import { marked } from 'marked'
 import { mangle } from 'marked-mangle'
 import { gfmHeadingId } from 'marked-gfm-heading-id'

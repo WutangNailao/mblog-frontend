@@ -40,113 +40,88 @@
       <div class="i-carbon:quotes hover:text-gray-9 cursor-pointer" title="引用" @click="appendValue('> ')"></div>
     </div>
 
-    <n-mention
-      type="textarea"
+    <Textarea
       placeholder="输入你要记录的吧,第一行以`#`开头的会被视为标签"
-      show-count
-      prefix="#"
-      :options="tags"
-      v-model:value="memoSaveParam.content"
-      v-if="tags && tags.length > 0"
+      v-model="memoSaveParam.content"
       @paste="paste"
-      :autosize="{
-        minRows: isFullscreen ? 20 : 5,
-        maxRows: isFullscreen ? 30 : 20,
-      }"
-    />
-    <n-input
-      v-else
-      type="textarea"
-      placeholder="输入你要记录的吧,第一行以`#`开头的会被视为标签"
-      show-count
-      v-model:value="memoSaveParam.content"
-      @paste="paste"
-      :autosize="{
-        minRows: isFullscreen ? 20 : 5,
-        maxRows: isFullscreen ? 30 : 20,
-      }"
+      auto-resize
+      :rows="isFullscreen ? 20 : 5"
     />
     <div class="fr gap-2 items-center">
-      <n-select v-model:value="memoSaveParam.visibility" :options="visibilityOptions" class="w-32" size="small" />
-      <n-upload :multiple="true" name="files" :show-file-list="false" :custom-request="customRequest" ref="uploadRef">
-        <div
-          class="i-carbon:cloud-upload cursor-pointer text-gray-500 hover:text-gray text-lg dark:text-yellow-3"
-        ></div>
-      </n-upload>
-      <n-popover :show="emojiShow" @clickoutside="emojiShow = false">
-        <template #trigger>
+      <AppSelect
+        v-model="memoSaveParam.visibility"
+        :options="visibilityOptions"
+        option-label="label"
+        option-value="value"
+        class="w-32"
+      />
+      <label class="cursor-pointer">
+        <div class="i-carbon:cloud-upload cursor-pointer text-gray-500 hover:text-gray text-lg dark:text-yellow-3"></div>
+        <input class="hidden" type="file" multiple @change="handleUploadChange" />
+      </label>
+      <div class="relative" ref="emojiWrapRef">
+        <template v-if="true">
           <div
             class="i-carbon:face-wink cursor-pointer hover:text-yellow text-lg dark:text-yellow-3"
-            @click="emojiShow = true"
+            @click="emojiShow = !emojiShow"
           ></div>
         </template>
-        <emoji-picker ref="pickerRef" @emoji-click="emojiClicked"></emoji-picker>
-      </n-popover>
+        <div v-if="emojiShow" class="absolute left-0 top-full z-20 mt-2 overflow-hidden rounded-lg border border-gray-2 bg-white shadow-xl dark:border-gray-6 dark:bg-gray-8">
+          <emoji-picker @emoji-click="emojiClicked"></emoji-picker>
+        </div>
+      </div>
       <div
         class="i-carbon:maximize cursor-pointer text-gray-500 hover:text-gray text-sm dark:text-yellow-3"
         @click="toggle()"
         title="全屏编辑"
       ></div>
-      <!-- <n-button @click="toggleDrauuBus.emit()" size="tiny" text> 随手画 </n-button> -->
-      <n-switch
-        v-model:value="memoSaveParam.enableComment"
-        size="small"
-        checked-value="1"
-        unchecked-value="0"
-        v-openComment
-      >
-        <template #checked> 允许评论 </template>
-        <template #unchecked> 禁止评论 </template></n-switch
-      >
+      <div v-openComment class="fr items-center gap-2 text-sm text-gray-6 dark:text-gray-3">
+        <ToggleSwitch v-model="commentEnabled" />
+        <span>{{ commentEnabled ? '允许评论' : '禁止评论' }}</span>
+      </div>
       <div class="ml-auto gap-2 fr items-center">
-        <n-button type="warning" class="px-8" @click="toggle()" v-if="isFullscreen"> 退出全屏 </n-button>
-        <n-button type="error" class="px-8" @click="exitEdit()" v-if="edited"> 退出编辑 </n-button>
-        <n-button type="primary" class="px-8" @click="saveMemo" :disabled="disbaled"> 记录 </n-button>
+        <Button v-if="isFullscreen" severity="warn" class="px-8" @click="toggle()">退出全屏</Button>
+        <Button v-if="edited" severity="danger" class="px-8" @click="exitEdit()">退出编辑</Button>
+        <Button class="px-8" @click="saveMemo" :disabled="disbaled">记录</Button>
       </div>
     </div>
 
     <div class="fr" v-if="uploadFiles">
-      <n-image-group>
-        <n-space>
-          <div class="relative" v-for="(img, index) in uploadFiles" :key="index">
-            <n-image
-              v-if="img.fileType.includes('image')"
-              width="100"
-              height="100"
-              lazy
-              class="rd hover:shadow-2xl"
-              :src="img.url + (img.fileType.includes('webp') ? '' : img.suffix || '')"
-              :fallback-src="img.url"
-              :preview-src="img.url"
-              :intersection-observer-options="{
-                root: '#image-scroll-container',
-              }"
-            >
-              <template #placeholder>
-                <div
-                  style="
-                    width: 100px;
-                    height: 100px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background-color: #0001;
-                  "
-                >
-                  Loading
-                </div>
-              </template>
-            </n-image>
-            <div v-else>
-              {{ img.fileName }}
-            </div>
-            <div class="deleteBtn i-carbon:close-filled" @click="deleteResource(img.publicId)"></div>
-            <div class="progress-bar" v-if="img.progress && img.progress > 0 && img.progress !== 100">
-              <n-progress type="line" :percentage="img.progress" :indicator-placement="'inside'" processing />
-            </div>
+      <div class="flex flex-wrap gap-2">
+        <div class="relative" v-for="(img, index) in uploadFiles" :key="index">
+          <Image
+            v-if="img.fileType.includes('image')"
+            width="100"
+            height="100"
+            preview
+            class="rd hover:shadow-2xl"
+            image-class="h-full w-full object-cover"
+            :src="img.url + (img.fileType.includes('webp') ? '' : img.suffix || '')"
+          >
+            <template #placeholder>
+              <div
+                style="
+                  width: 100px;
+                  height: 100px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background-color: #0001;
+                "
+              >
+                Loading
+              </div>
+            </template>
+          </Image>
+          <div v-else>
+            {{ img.fileName }}
           </div>
-        </n-space>
-      </n-image-group>
+          <div class="deleteBtn i-carbon:close-filled" @click="deleteResource(img.publicId)"></div>
+          <div class="progress-bar" v-if="img.progress && img.progress > 0 && img.progress !== 100">
+            <ProgressBar :value="img.progress" />
+          </div>
+        </div>
+      </div>
     </div>
 
     <Drauu />
@@ -164,8 +139,13 @@ import { marked } from 'marked'
 import { mangle } from 'marked-mangle'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
 import { getVisbilitys, type MemoSaveParam, type MemoDTO } from '@/types/memo'
-import { type Tag } from '@/types/tag'
-import { type MentionOption, type UploadCustomRequestOptions, type UploadInst } from 'naive-ui'
+import type { UploadCustomRequestOptions } from '@/ui/types/upload'
+import { useAppMessage } from '@/ui/useAppMessage'
+import Button from 'primevue/button'
+import Image from 'primevue/image'
+import ProgressBar from 'primevue/progressbar'
+import Textarea from 'primevue/textarea'
+import ToggleSwitch from 'primevue/toggleswitch'
 import 'emoji-picker-element'
 
 const options = {
@@ -173,7 +153,6 @@ const options = {
 }
 marked.use(gfmHeadingId(options))
 marked.use(mangle())
-const tags = ref<Array<MentionOption>>()
 
 let memoSaveParam: MemoSaveParam = reactive({
   visibility: 'PUBLIC',
@@ -191,19 +170,25 @@ interface UploadItem {
 }
 
 const disbaled = ref(false)
+const message = useAppMessage()
 const fcRef = ref<HTMLElement | null>(null)
 
 const { toggle, isFullscreen } = useFullscreen(fcRef as any)
 
-const uploadRef = ref<UploadInst | null>(null)
-
 let uploadFiles = ref<Array<UploadItem>>([])
 
 const emojiShow = ref(false)
+const emojiWrapRef = ref<HTMLElement | null>(null)
 
 const visibilityOptions = getVisbilitys()
 
 const edited = ref(false)
+const commentEnabled = computed({
+  get: () => memoSaveParam.enableComment === '1',
+  set: (value: boolean) => {
+    memoSaveParam.enableComment = value ? '1' : '0'
+  },
+})
 
 onKeyStroke(true, (e) => {
   if (e.ctrlKey && e.key === 'Enter') {
@@ -214,18 +199,10 @@ onKeyStroke(true, (e) => {
 onMounted(async () => {
   memoSaveParam.visibility = userinfo.value.defaultVisibility || 'PUBLIC'
   memoSaveParam.enableComment = userinfo.value.defaultEnableComment === 'true' ? '1' : '0'
+})
 
-  if (userinfo.value.token) {
-    const { data, error } = await useMyFetch('/api/tag/list').post().json()
-    if (error.value) return
-    const tagList = data.value as Array<Tag>
-    tags.value = tagList.map((r) => {
-      return {
-        label: r.name.substring(1),
-        value: r.name.substring(1),
-      }
-    })
-  }
+onClickOutside(emojiWrapRef, () => {
+  emojiShow.value = false
 })
 
 const appendValue = (content: string) => {
@@ -248,6 +225,15 @@ const paste = async (e: any) => {
   }
 }
 
+const handleUploadChange = async (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const files = Array.from(target.files || [])
+  for (const file of files) {
+    await customRequest({ file: { file } })
+  }
+  target.value = ''
+}
+
 const emojiClicked = async (event: { detail: any }) => {
   const textArea = document.querySelector('textarea') as HTMLTextAreaElement
   const emojiVal = event.detail.unicode
@@ -266,8 +252,6 @@ const emojiClicked = async (event: { detail: any }) => {
 }
 
 const saveMemo = async () => {
-  const { message } = createDiscreteApi(['message'])
-
   const uploading = uploadFiles.value.filter((r) => r.progress && r.progress < 100)
   if (uploading.length > 0) {
     message.error('图片还没上传完.')
@@ -329,7 +313,6 @@ const upload = async (file: File, fileObj: UploadItem) => {
   if (result.status === 200) {
     const data = JSON.parse(result.body)
     memoSaveParam.publicIds?.push(data.data[0].publicId)
-    uploadRef.value?.clear()
   }
 }
 
@@ -386,11 +369,6 @@ const deleteResource = (publicId: string) => {
 </script>
 
 <style scoped>
-::v-deep(.n-upload) {
-  width: auto;
-  display: flex;
-}
-
 .deleteBtn {
   position: absolute;
   top: 0;

@@ -1,72 +1,47 @@
 <template>
   <div class="dark:bg-gray-7">
-    <n-data-table :columns="columns" :data="tags" :bordered="false" />
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left border-collapse">
+        <thead>
+          <tr class="border-b border-gray-2 dark:border-gray-6">
+            <th class="py-2 pr-3">ID</th>
+            <th class="py-2 pr-3">标签名称</th>
+            <th class="py-2 pr-3">引用计数</th>
+            <th class="py-2">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(tag, index) in tags" :key="tag.id" class="border-b border-gray-1 dark:border-gray-7">
+            <td class="py-2 pr-3">{{ tag.id }}</td>
+            <td class="py-2 pr-3">
+              <InputText v-model="tags[index].name" @update:modelValue="tags[index].edited = true" />
+            </td>
+            <td class="py-2 pr-3">{{ tag.count }}</td>
+            <td class="py-2">
+              <Button v-if="tag.count === 0" severity="danger" size="small" @click="removeTag(tag.id)">删除</Button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="flex items-center justify-center mt-2">
-      <n-button type="primary" @click="saveTag" v-if="tags.length > 0">保存标签</n-button>
+      <Button @click="saveTag" v-if="tags.length > 0">保存标签</Button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Tag } from '@/types/tag'
-import { NButton, type DataTableColumns, NInput } from 'naive-ui'
-
-const columns: DataTableColumns<Tag> = [
-  {
-    title: 'id',
-    key: 'id',
-    align: 'center',
-  },
-  {
-    title: '标签名称',
-    key: 'name',
-    align: 'center',
-    width: '200',
-    render(row, index) {
-      return h(NInput, {
-        value: row.name,
-        onUpdateValue(v) {
-          tags.value[index].name = v
-          tags.value[index].edited = true
-        },
-      })
-    },
-  },
-  {
-    title: '引用计数',
-    key: 'count',
-    align: 'center',
-  },
-  {
-    title: '操作',
-    key: 'actions',
-    align: 'center',
-    render(row) {
-      if (row.count > 0) {
-        return
-      }
-      return h(
-        NButton,
-        {
-          type: 'error',
-          strong: true,
-          size: 'small',
-          onClick: () => {
-            removeTag(row.id)
-          },
-        },
-        { default: () => '删除' }
-      )
-    },
-  },
-]
+import { useAppMessage } from '@/ui/useAppMessage'
+import Button from 'primevue/button'
+import InputText from 'primevue/inputtext'
 
 const tags = ref<Array<Tag>>([])
+const message = useAppMessage()
 
 onMounted(async () => {
   await reload()
 })
-const { message } = createDiscreteApi(['message'])
 
 const removeTag = async (id: number) => {
   const { error } = await useMyFetch('/api/tag/remove?id=' + id)

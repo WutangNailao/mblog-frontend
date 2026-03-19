@@ -1,20 +1,19 @@
 <template>
   <div class="fc gap-2 px-4">
     <div class="fr gap-2">
-      <n-button type="info" v-if="!token.id" @click="enableToken">启用开发者Token</n-button>
-      <n-button type="primary" v-if="token.id" @click="resetToken">重置Token</n-button>
-      <n-button type="error" v-if="token.id" @click="disableToken">禁用开发者Token</n-button>
-      <n-button type="info" v-if="token.id" @click="copyToken">一键复制Token</n-button>
+      <Button severity="info" v-if="!token.id" @click="enableToken">启用开发者Token</Button>
+      <Button v-if="token.id" @click="resetToken">重置Token</Button>
+      <Button severity="danger" v-if="token.id" @click="disableToken">禁用开发者Token</Button>
+      <Button severity="info" v-if="token.id" @click="copyToken">一键复制Token</Button>
     </div>
 
-    <n-input
+    <Textarea
       v-if="token.id"
-      type="textarea"
       :rows="3"
       :readonly="true"
-      :resizable="false"
-      v-model:value="token.token"
-    ></n-input>
+      auto-resize
+      v-model="token.token"
+    ></Textarea>
 
     <div>
       <h3>发表内容</h3>
@@ -82,12 +81,16 @@
 
 <script setup lang="ts">
 import type { Token } from '@/types/token'
+import { useAppMessage } from '@/ui/useAppMessage'
+import Button from 'primevue/button'
+import Textarea from 'primevue/textarea'
 
 onMounted(async () => {
   await reload()
 })
 
 const token = ref<Partial<Token>>({})
+const message = useAppMessage()
 
 const tokenStr = ref('')
 const { copy } = useClipboard({ source: tokenStr })
@@ -95,7 +98,6 @@ const { copy } = useClipboard({ source: tokenStr })
 const copyToken = () => {
   tokenStr.value = token.value.token!
   copy()
-  const { message } = createDiscreteApi(['message'])
   message.success('复制token成功!')
 }
 

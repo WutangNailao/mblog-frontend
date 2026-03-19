@@ -1,14 +1,29 @@
 <template>
-  <div class="wrapper" ref="wrapper" :style="{ width: isSmallerScreen ? '100%' : sessionStorage.INDEX_WIDTH }">
-    <div class="main fr gap-2">
+  <div class="shell">
+    <div class="wrapper" ref="wrapper" :style="{ maxWidth: isSmallerScreen ? '100%' : sessionStorage.INDEX_WIDTH }">
+      <header class="masthead">
+        <div>
+          <div class="masthead-kicker">Personal Publishing</div>
+          <div class="masthead-title">{{ sessionStorage.WEBSITE_TITLE }}</div>
+        </div>
+        <div class="masthead-copy">
+          {{ userinfo.token ? '面向写作的个人文章工作台' : '一页一页阅读与记录' }}
+        </div>
+      </header>
+
+      <div class="main fr gap-2">
+        <div class="left">
+          <LeftNav v-if="userinfo.token || !route.path.startsWith('/memo')" />
+        </div>
+        <div class="middle">
+          <RouterView />
+        </div>
+        <div class="right" :style="{ visibility: userinfo.token ? 'visible' : 'hidden' }">
+          <RightNav />
+        </div>
+      </div>
       <div class="left">
-        <LeftNav v-if="userinfo.token || !route.path.startsWith('/memo')" />
-      </div>
-      <div class="middle">
-        <RouterView />
-      </div>
-      <div class="right" :style="{ visibility: userinfo.token ? 'visible' : 'hidden' }">
-        <RightNav />
+        <div class="page-tail">Built for drafting, editing, and archiving.</div>
       </div>
     </div>
     <div
@@ -19,17 +34,17 @@
     </div>
   </div>
 
-  <n-drawer v-model:show="showDrawer" :width="'60%'" placement="right">
-    <n-drawer-content>
-      <div class="fc gap-2">
-        <LeftNav />
-        <RightNav v-if="userinfo.token" />
-      </div>
-    </n-drawer-content>
-  </n-drawer>
+  <Drawer v-model:visible="showDrawer" position="right" :style="{ width: '60%' }">
+    <div class="fc gap-2">
+      <LeftNav />
+      <RightNav v-if="userinfo.token" />
+    </div>
+  </Drawer>
 </template>
 
 <script setup lang="ts">
+import Drawer from 'primevue/drawer'
+
 const preferredColor = usePreferredColorScheme()
 const userinfo = useStorage('userinfo', { username: '', token: '' })
 const themeModelVal = useLocalStorage('themeModel', { theme: 'light' })
@@ -107,33 +122,113 @@ onBeforeMount(async () => {
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1.5rem;
   margin-left: auto;
   margin-right: auto;
+  padding: 2rem 1rem 3rem;
+}
+
+.shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(245, 245, 244, 0.9), transparent 35%),
+    linear-gradient(180deg, #fafaf9 0%, #f5f5f4 30%, #fafaf9 100%);
+}
+
+.masthead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #d6d3d1;
+}
+
+.masthead-kicker,
+.page-tail {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #78716c;
+}
+
+.masthead-title {
+  margin-top: 0.45rem;
+  color: #1c1917;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.masthead-copy {
+  max-width: 20rem;
+  color: #57534e;
+  line-height: 1.7;
 }
 
 .wrapper .left {
-  width: 7rem;
+  width: 12rem;
 }
 
 .wrapper .middle {
   flex: 1 1 0%;
+  min-width: 0;
 }
 
 .wrapper .right {
-  width: 12.5rem;
+  width: 14rem;
+}
+
+.page-tail {
+  padding-top: 0.5rem;
 }
 
 @media screen and (min-width: 1024px) {
   .wrapper {
-    width: 50rem;
+    width: min(100%, 75rem);
   }
 }
 
 @media screen and (max-width: 639px) {
+  .wrapper {
+    padding: 1rem 0.75rem 2rem;
+    gap: 1rem;
+  }
+
+  .masthead {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .masthead-copy,
+  .page-tail {
+    max-width: none;
+  }
+
   .wrapper .left,
   .wrapper .right {
     display: none;
   }
+}
+
+:global(html.dark) .shell {
+  background:
+    radial-gradient(circle at top left, rgba(63, 63, 70, 0.25), transparent 35%),
+    linear-gradient(180deg, #09090b 0%, #18181b 30%, #09090b 100%);
+}
+
+:global(html.dark) .masthead {
+  border-bottom-color: #44403c;
+}
+
+:global(html.dark) .masthead-kicker,
+:global(html.dark) .masthead-copy,
+:global(html.dark) .page-tail {
+  color: #d6d3d1;
+}
+
+:global(html.dark) .masthead-title {
+  color: #fafaf9;
 }
 </style>

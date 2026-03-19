@@ -1,6 +1,7 @@
 import './style.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import PrimeVue from 'primevue/config'
 import generatedRoutes from '~pages'
 import App from './App.vue'
 import { setupLayouts } from 'virtual:generated-layouts'
@@ -33,6 +34,9 @@ router.beforeEach((to, from, next) => {
 })
 app.use(router)
 app.use(pinia)
+app.use(PrimeVue, {
+  unstyled: true,
+})
 
 installDirectives(app)
 

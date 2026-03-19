@@ -1,7 +1,6 @@
 import { fileURLToPath, URL } from 'node:url'
 import Components from 'unplugin-vue-components/vite'
 import Pages from 'vite-plugin-pages'
-import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import Layouts from 'vite-plugin-vue-layouts'
 import tailwindcss from '@tailwindcss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -22,7 +21,6 @@ export default defineConfig({
       },
     }),
     Components({
-      resolvers: [NaiveUiResolver()],
       extensions: ['vue'],
       include: [/\.vue$/, /\.vue\?vue/],
       dts: 'src/components.d.ts',
@@ -30,14 +28,7 @@ export default defineConfig({
     Pages(),
     Layouts(),
     AutoImport({
-      imports: [
-        'vue',
-        'vue-router',
-        '@vueuse/core',
-        {
-          'naive-ui': ['useDialog', 'createDiscreteApi', 'useNotification', 'useLoadingBar'],
-        },
-      ],
+      imports: ['vue', 'vue-router', '@vueuse/core'],
       dirs: ['src/api', 'src/event', 'src/types'],
       dts: 'src/auto-imports.d.ts',
       vueTemplate: true,

@@ -9,29 +9,33 @@
       </div>
       <div class="">
 
-        <n-image-group>
-          <n-space>
-            <n-image v-for="(img, index) in imgs" class="rd hover:shadow-2xl" :key="index" :width="thumbnailWidth"
-              :height="thumbnailHeight" lazy object-fit="cover"
-              :src="img.url + (img.fileType.includes('webp') ? '' : img.suffix || '')" :fallback-src="img.url"
-              :preview-src="img.url" :intersection-observer-options="{
-        root: '#image-scroll-container',
-      }">
-              <template #placeholder>
-                <div style="
+        <div class="flex flex-wrap gap-2">
+          <Image
+            v-for="(img, index) in imgs"
+            :key="index"
+            class="rd hover:shadow-2xl"
+            :width="thumbnailWidth"
+            :height="thumbnailHeight"
+            preview
+            image-class="h-full w-full object-cover"
+            :src="img.url + (img.fileType.includes('webp') ? '' : img.suffix || '')"
+          >
+            <template #placeholder>
+              <div
+                style="
                   width: 100px;
                   height: 100px;
                   display: flex;
                   align-items: center;
                   justify-content: center;
                   background-color: #0001;
-                ">
-                  加载中...
-                </div>
-              </template>
-            </n-image>
-          </n-space>
-        </n-image-group>
+                "
+              >
+                加载中...
+              </div>
+            </template>
+          </Image>
+        </div>
 
 
       </div>
@@ -90,6 +94,7 @@ import { marked } from 'marked'
 import { mangle } from 'marked-mangle'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
 import type { QueryCommentResponse } from '@/types/comment';
+import Image from 'primevue/image'
 
 dayjs.extend(relativeTime)
 

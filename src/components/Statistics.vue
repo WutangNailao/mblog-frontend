@@ -16,12 +16,14 @@
     </div>
 
     <div class="custom-grid">
-      <n-tooltip placement="bottom" trigger="hover" v-for="idx in total" :key="idx">
-        <template #trigger>
-          <div class="grid-item" @click="searchMemoByDay(total - idx)" :style="opacity(total - idx)"></div>
-        </template>
-        <span>{{ tooltip(total - idx) }}</span>
-      </n-tooltip>
+      <div
+        v-for="idx in total"
+        :key="idx"
+        v-tooltip.bottom="tooltip(total - idx)"
+        class="grid-item"
+        :style="opacity(total - idx)"
+        @click="searchMemoByDay(total - idx)"
+      ></div>
     </div>
   </div>
 </template>
@@ -29,6 +31,9 @@
 <script setup lang="ts">
 import type { StatisticsDTO } from '@/types/memo'
 import dayjs from 'dayjs'
+import Tooltip from 'primevue/tooltip'
+
+const vTooltip = Tooltip
 
 onMounted(async () => {
   await reload()

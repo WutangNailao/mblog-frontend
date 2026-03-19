@@ -1,6 +1,6 @@
 import { createFetch } from '@vueuse/core'
-import { createDiscreteApi } from 'naive-ui'
-const { message } = createDiscreteApi(['message'])
+import { useAppMessage } from '@/ui/useAppMessage'
+const message = useAppMessage()
 
 export const useMyFetch = createFetch({
   baseUrl: import.meta.env.VITE_BASE_URL,

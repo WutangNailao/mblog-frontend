@@ -1,33 +1,32 @@
 <template>
   <div class="rd bg-white p-2 dark:bg-gray-700">
-    <div class="w-2/3 mx-auto">
-      <n-form ref="formRef" :label-width="80" :model="formValue" :rules="rules">
-        <n-form-item label="用户名" path="username">
-          <n-input v-model:value="formValue.username" placeholder="输入用户名" />
-        </n-form-item>
-        <n-form-item label="密码" path="password">
-          <n-input v-model:value="formValue.password" placeholder="输入密码" type="password" />
-        </n-form-item>
-        <n-form-item>
-          <n-space align="center">
-            <n-button attr-type="button" type="primary" @click="doLogin"> 登录 </n-button>
-            <n-button text attr-type="button" type="info" v-openRegister>
-              <RouterLink to="/register" class="dark:text-white">去注册</RouterLink>
-            </n-button>
-          </n-space>
-        </n-form-item>
-      </n-form>
+    <div class="mx-auto flex w-2/3 flex-col gap-4">
+      <label class="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">
+        <span class="font-medium">用户名</span>
+        <InputText v-model="formValue.username" placeholder="输入用户名" />
+      </label>
+      <label class="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">
+        <span class="font-medium">密码</span>
+        <InputText v-model="formValue.password" placeholder="输入密码" type="password" />
+      </label>
+      <div class="flex flex-wrap items-center gap-2">
+        <Button type="button" severity="primary" @click="doLogin">登录</Button>
+        <Button type="button" variant="text" severity="info" v-openRegister>
+          <RouterLink to="/register" class="dark:text-white">去注册</RouterLink>
+        </Button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { FormInst, FormRules } from 'naive-ui'
+import { useAppMessage } from '@/ui/useAppMessage'
+import Button from 'primevue/button'
+import InputText from 'primevue/inputtext'
 
 const router = useRouter()
 const route = useRoute()
-const formRef = ref<FormInst | null>(null)
-const { message } = createDiscreteApi(['message'])
+const message = useAppMessage()
 const userinfo = useStorage('userinfo', { username: '', token: '', role: '' })
 
 const formValue = reactive({
@@ -35,33 +34,24 @@ const formValue = reactive({
   password: '',
 })
 
-const rules: FormRules = {
-  username: [
-    {
-      required: true,
-      message: '用户名必填',
-      trigger: ['blur'],
-    },
-  ],
-  password: [
-    {
-      required: true,
-      message: '密码必填',
-      trigger: ['blur'],
-    },
-    {
-      min: 6,
-      max: 20,
-      message: '密码必须在6-20位之间',
-      trigger: ['blur'],
-    },
-  ],
-}
-
 const doLogin = () => {
-  formRef.value?.validate(async (errors) => {
-    if (!errors) {
-      const { error, data } = await useMyFetch('/api/user/login').post(formValue).json()
+  if (!formValue.username) {
+    message.warning('用户名必填')
+    return
+  }
+  if (!formValue.password) {
+    message.warning('密码必填')
+    return
+  }
+  if (formValue.password.length < 6 || formValue.password.length > 20) {
+    message.warning('密码必须在6-20位之间')
+    return
+  }
+
+  useMyFetch('/api/user/login')
+    .post(formValue)
+    .json()
+    .then(({ error, data }) => {
       if (!error.value) {
         const target = (route.query.redirect as string) || '/'
         message.success('登录成功,请稍等...', {
@@ -72,7 +62,6 @@ const doLogin = () => {
           },
         })
       }
-    }
-  })
+    })
 }
 </script>

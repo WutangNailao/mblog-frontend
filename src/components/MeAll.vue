@@ -1,17 +1,24 @@
 <template>
   <div class="fc">
     <div class="search">
-      <n-space>
-        <n-tag type="success" closable v-if="state.search.tag" @close="state.search.tag = undefined">
-          {{ state.search.tag }}
-        </n-tag>
-        <n-tag type="info" closable v-if="state.search.visibility" @close="state.search.visibility = undefined">
-          {{ getVisbilityDesc(state.search.visibility) }}
-        </n-tag>
-        <n-tag type="error" closable v-if="searchDayDesc" @close="clearSearchDate">
-          {{ searchDayDesc }}
-        </n-tag>
-      </n-space>
+      <div class="flex flex-wrap gap-2">
+        <button v-if="state.search.tag" class="filter-pill filter-pill-success" @click="state.search.tag = undefined">
+          <span>{{ state.search.tag }}</span>
+          <span class="i-carbon:close-small" aria-hidden="true"></span>
+        </button>
+        <button
+          v-if="state.search.visibility"
+          class="filter-pill filter-pill-info"
+          @click="state.search.visibility = undefined"
+        >
+          <span>{{ getVisbilityDesc(state.search.visibility) }}</span>
+          <span class="i-carbon:close-small" aria-hidden="true"></span>
+        </button>
+        <button v-if="searchDayDesc" class="filter-pill filter-pill-error" @click="clearSearchDate">
+          <span>{{ searchDayDesc }}</span>
+          <span class="i-carbon:close-small" aria-hidden="true"></span>
+        </button>
+      </div>
     </div>
     <memo :memo="item" v-for="item in state.memos" :key="item.id" :id="item.id" />
 
@@ -123,4 +130,46 @@ const searchDayDesc = computed(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 0;
+  border-radius: 9999px;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  cursor: pointer;
+}
+
+.filter-pill-success {
+  background: rgb(220 252 231);
+  color: rgb(22 101 52);
+}
+
+.filter-pill-info {
+  background: rgb(219 234 254);
+  color: rgb(30 64 175);
+}
+
+.filter-pill-error {
+  background: rgb(254 226 226);
+  color: rgb(153 27 27);
+}
+
+:global(html.dark) .filter-pill-success {
+  background: rgb(20 83 45 / 0.4);
+  color: rgb(187 247 208);
+}
+
+:global(html.dark) .filter-pill-info {
+  background: rgb(30 58 138 / 0.4);
+  color: rgb(191 219 254);
+}
+
+:global(html.dark) .filter-pill-error {
+  background: rgb(127 29 29 / 0.4);
+  color: rgb(254 202 202);
+}
+</style>

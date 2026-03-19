@@ -39,17 +39,9 @@
         <div class="i-carbon:book"></div>
       </div>
 
-      <n-popover
-        trigger="manual"
-        placement="left"
-        :show="popoverShow"
-        @clickoutside="popoverShow = false"
-        v-if="userinfo.token && route.path === '/'"
-      >
-        <template #trigger>
-          <div class="detail i-carbon:table" @click="popoverShow = !popoverShow"></div>
-        </template>
-        <div class="fc gap-1">
+      <div class="relative" v-if="userinfo.token && route.path === '/'" ref="menuRef">
+        <div class="detail i-carbon:table" @click="popoverShow = !popoverShow"></div>
+        <div v-if="popoverShow" class="absolute right-0 top-full mt-2 fc gap-1 rounded border border-gray-2 bg-white p-2 text-sm shadow-lg dark:border-gray-6 dark:bg-gray-8">
           <div
             v-if="props.memo.userId === userinfo.userId"
             class="fr gap-1 items-center cursor-pointer hover:text-blue-600"
@@ -82,22 +74,16 @@
             <div class="i-carbon:down-to-bottom"></div>
             <div>取消置顶</div>
           </div>
-          <n-popconfirm
-            :show-icon="false"
+          <div
             v-if="props.memo.userId === userinfo.userId || userinfo.role === 'ADMIN'"
-            @positive-click="removeMemo(props.memo.id)"
-            negative-text="取消"
-            positive-text="确定"
+            class="fr gap-1 items-center cursor-pointer hover:text-blue-600"
+            @click="confirmRemoveMemo(props.memo.id)"
           >
-            <template #trigger>
-              <div class="fr gap-1 items-center cursor-pointer hover:text-blue-600">
-                <div class="i-carbon:trash-can"></div>
-                <div>删除</div>
-              </div>
-            </template>
-          </n-popconfirm>
+            <div class="i-carbon:trash-can"></div>
+            <div>删除</div>
+          </div>
         </div>
-      </n-popover>
+      </div>
     </div>
     <div
       class="content md-content"
@@ -107,40 +93,33 @@
     ></div>
 
     <div class="imgs" v-if="imgs && imgs.length > 0">
-      <n-image-group>
-        <n-space>
-          <n-image
-            v-for="(img, index) in imgs"
-            class="rd hover:shadow-2xl"
-            :key="index"
-            :width="thumbnailWidth"
-            :height="thumbnailHeight"
-            lazy
-            object-fit="cover"
-            :src="img.url + (img.fileType.includes('webp') ? '' : img.suffix || '')"
-            :fallback-src="img.url"
-            :preview-src="img.url"
-            :intersection-observer-options="{
-              root: '#image-scroll-container',
-            }"
-          >
-            <template #placeholder>
-              <div
-                style="
-                  width: 100px;
-                  height: 100px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  background-color: #0001;
-                "
-              >
-                加载中...
-              </div>
-            </template>
-          </n-image>
-        </n-space>
-      </n-image-group>
+      <div class="flex flex-wrap gap-2">
+        <Image
+          v-for="(img, index) in imgs"
+          :key="index"
+          class="rd hover:shadow-2xl"
+          :width="thumbnailWidth"
+          :height="thumbnailHeight"
+          preview
+          image-class="h-full w-full object-cover"
+          :src="img.url + (img.fileType.includes('webp') ? '' : img.suffix || '')"
+        >
+          <template #placeholder>
+            <div
+              style="
+                width: 100px;
+                height: 100px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #0001;
+              "
+            >
+              加载中...
+            </div>
+          </template>
+        </Image>
+      </div>
     </div>
     <div class="fc gap-2 px-2 mb-2 flex-wrap" v-if="files && files.length > 0">
       <div v-for="(resource, index) in files" :key="index" class="text-sm text-gray-3">
@@ -174,7 +153,7 @@
     <div class="source" v-if="props.memo.source && props.memo.source !== 'web'">来自{{ props.memo.source }}</div>
   </div>
   <div class="flex items-center justify-center my-4" v-if="route.path !== '/' && !userinfo.token">
-    <n-button type="primary" class="px-6" @click="router.push('/')">回首页</n-button>
+    <Button class="px-6" @click="router.push('/')">回首页</Button>
   </div>
 </template>
 
@@ -186,7 +165,10 @@ import { gfmHeadingId } from 'marked-gfm-heading-id'
 import { type MemoDTO, getVisbilityDesc } from '@/types/memo'
 import { searchMemosBus, reloadMemosBus } from '@/event/event'
 import { useMyFetch } from '@/api/fetch'
+import { useAppMessage } from '@/ui/useAppMessage'
 import dayjs from 'dayjs'
+import Button from 'primevue/button'
+import Image from 'primevue/image'
 const options = {
   prefix: 'mblog-',
 }
@@ -203,6 +185,7 @@ const props = withDefaults(
 )
 
 const userinfo = useStorage('userinfo', { token: '', userId: 0, role: '' })
+const message = useAppMessage()
 
 const route = useRoute()
 
@@ -232,7 +215,6 @@ const setMemoPriority = async (id: number, top: boolean) => {
   popoverShow.value = false
   const { error } = await useMyFetch(`/api/memo/setPriority?id=${id}&set=${top}`).post().json()
   if (!error.value) {
-    const { message } = createDiscreteApi(['message'])
     message.success('操作成功')
     reloadMemosBus.emit()
   }
@@ -244,7 +226,6 @@ const goToDetail = (id: number) => {
 
 const saveRealtion = async (memo: MemoDTO) => {
   if (!userinfo.value.token) {
-    const { message } = createDiscreteApi(['message'])
     message.warning('请先登录')
     return
   }
@@ -256,7 +237,6 @@ const saveRealtion = async (memo: MemoDTO) => {
     })
     .json()
   if (!error.value) {
-    const { message } = createDiscreteApi(['message'])
     message.success('操作成功')
     reloadMemosBus.emit()
   }
@@ -284,15 +264,25 @@ onMounted(() => {
 
 const router = useRouter()
 const navTo = (path: string) => {
+  popoverShow.value = false
   router.push(path)
 }
 
 const popoverShow = ref(false)
+const menuRef = ref<HTMLElement | null>(null)
+onClickOutside(menuRef, () => {
+  popoverShow.value = false
+})
+
+const confirmRemoveMemo = async (id: number) => {
+  if (!window.confirm('确认删除这条记录？')) return
+  popoverShow.value = false
+  await removeMemo(id)
+}
 
 const removeMemo = async (id: number) => {
   const { error } = await useMyFetch(`/api/memo/remove?id=${id}`).post().json()
   if (!error.value) {
-    const { message } = createDiscreteApi(['message'])
     message.success('删除成功')
     changedMemoBus.emit({ id, deleteMemo: true })
   }

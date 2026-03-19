@@ -1,31 +1,47 @@
 <template>
   <div class="fc">
-    <n-tabs type="bar" @update-value="changeTab">
-      <n-tab-pane name="all">
-        <template #tab>全部({{ state.total }})</template>
-        <MeAll />
-      </n-tab-pane>
-      <n-tab-pane name="liked">
-        <template #tab>已点赞({{ state.liked }})</template>
-        <MeAll :liked="true" />
-      </n-tab-pane>
-      <n-tab-pane name="commented">
-        <template #tab>已评论({{ state.commented }})</template>
-        <MeAll :commented="true" />
-      </n-tab-pane>
-      <n-tab-pane name="mentioned">
-        <template #tab>
-          <n-badge :value="state.unreadMentioned" size="small">
-            <div class="men" style="color: rgb(31, 34, 37)">被提到({{ state.mentioned }})</div></n-badge
-          >
-        </template>
-        <MeAll :commented="true" :mentioned="true"
-      /></n-tab-pane>
-    </n-tabs>
+    <Tabs v-model:value="currentTab" class="w-full">
+      <TabList class="rounded-t-md bg-white px-2 dark:bg-black">
+        <Tab value="all">全部({{ state.total }})</Tab>
+        <Tab value="liked">已点赞({{ state.liked }})</Tab>
+        <Tab value="commented">已评论({{ state.commented }})</Tab>
+        <Tab value="mentioned">
+          <span class="relative inline-flex items-center">
+            <span class="men" style="color: rgb(31, 34, 37)">被提到({{ state.mentioned }})</span>
+            <Badge
+              v-if="state.unreadMentioned > 0"
+              :value="state.unreadMentioned"
+              class="ml-1"
+            />
+          </span>
+        </Tab>
+      </TabList>
+      <TabPanels>
+        <TabPanel value="all">
+          <MeAll />
+        </TabPanel>
+        <TabPanel value="liked">
+          <MeAll :liked="true" />
+        </TabPanel>
+        <TabPanel value="commented">
+          <MeAll :commented="true" />
+        </TabPanel>
+        <TabPanel value="mentioned">
+          <MeAll :commented="true" :mentioned="true" />
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
   </div>
 </template>
 
 <script setup lang="ts">
+import Badge from 'primevue/badge'
+import Tab from 'primevue/tab'
+import TabList from 'primevue/tablist'
+import TabPanel from 'primevue/tabpanel'
+import TabPanels from 'primevue/tabpanels'
+import Tabs from 'primevue/tabs'
+
 const state = ref<MemoStatisticsDto>({
   total: 0,
   liked: 0,
@@ -33,6 +49,7 @@ const state = ref<MemoStatisticsDto>({
   commented: 0,
   unreadMentioned: 0,
 })
+const currentTab = ref('all')
 
 interface MemoStatisticsDto {
   total: number
@@ -56,17 +73,19 @@ const changeTab = async (value: string | number) => {
     state.value.unreadMentioned = 0
   }
 }
+
+watch(currentTab, changeTab)
 </script>
 
 <style scoped>
-::v-deep(.n-tabs-nav--bar-type) {
+::v-deep(.p-tablist-tab-list) {
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
   background-color: #fff;
   padding: 0 10px;
 }
 
-::v-deep(html.dark .n-tabs-nav--bar-type) {
+::v-deep(html.dark .p-tablist-tab-list) {
   background-color: black;
 }
 </style>

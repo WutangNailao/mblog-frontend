@@ -1,14 +1,25 @@
 <template>
   <div>
-    <n-upload :multiple="false" name="file" :show-file-list="false" :custom-request="customRequest" ref="uploadRef">
-      <n-button>导入flomo</n-button>
-    </n-upload>
+    <label class="inline-flex cursor-pointer">
+      <Button as="span">导入flomo</Button>
+      <input class="hidden" type="file" accept=".json,.txt" @change="handleFileChange" />
+    </label>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { UploadCustomRequestOptions } from 'naive-ui'
+import type { UploadCustomRequestOptions } from '@/ui/types/upload'
+import Button from 'primevue/button'
+
 const userinfo = useStorage('userinfo', { token: '' })
+
+const handleFileChange = async (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+  await customRequest({ file: { file } })
+  target.value = ''
+}
 
 const customRequest = async ({ file }: UploadCustomRequestOptions) => {
   const uploadUrl = `${import.meta.env.VITE_BASE_URL}/api/import/flomo`

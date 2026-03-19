@@ -1,5 +1,11 @@
 <template>
   <div class="parent">
+    <div class="brand">
+      <div class="brand-kicker">Notebook</div>
+      <div class="brand-title">{{ siteTitle }}</div>
+      <div class="brand-copy">{{ userinfo.token ? '写作 / 归档 / 发布' : '阅读 / 浏览 / 发现' }}</div>
+    </div>
+
     <div
       class="item"
       :class="{ selected: route.path === '/' }"
@@ -49,7 +55,8 @@
       <div class="i-carbon:login"></div>
       <div>登录</div>
     </div>
-    <div class="fr gap-2 items-center justify-center">
+    <div class="meta-label">Appearance</div>
+    <div class="fr gap-2 items-center justify-start tool-row">
       <div
         class="i-carbon:moon hover:text-gray-7 cursor-pointer"
         @click="toggleTheme('dark')"
@@ -66,7 +73,7 @@
         href="https://github.com/kingwrcy/mblog-backend"
       ></a>
     </div>
-    <div class="flex justify-center text-xs text-gray-400 pb-1 hover-text-gray-700 cursor-pointer" v-if="version">
+    <div class="version" v-if="version">
       <a
         :href="'https://github.com/kingwrcy/mblog-backend/releases/tag/v' + computedVersion"
         target="_blank"
@@ -81,6 +88,8 @@
 <script setup lang="ts">
 const themeModelVal = useLocalStorage('themeModel', { theme: 'light' })
 const version = import.meta.env.VITE_MBLOG_VERSION
+const title = useTitle()
+const siteTitle = computed(() => title.value || 'MBlog')
 const computedVersion = computed(() => {
   if (version) {
     if (version.startsWith('v')) {
@@ -115,11 +124,40 @@ const logout = () => {
 .parent {
   display: flex;
   position: sticky;
-  top: 0;
+  top: 1.5rem;
   flex-direction: column;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  padding: 0.5rem;
+  gap: 0.85rem;
+  padding: 1rem 0.75rem;
+  border-right: 1px solid #d6d3d1;
+}
+
+.brand {
+  margin-bottom: 0.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e7e5e4;
+}
+
+.brand-kicker,
+.meta-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #78716c;
+}
+
+.brand-title {
+  margin-top: 0.35rem;
+  color: #1c1917;
+  font-size: 1.35rem;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.brand-copy {
+  margin-top: 0.35rem;
+  color: #57534e;
+  font-size: 0.85rem;
+  line-height: 1.6;
 }
 
 .parent .item {
@@ -128,23 +166,91 @@ const logout = () => {
   cursor: pointer;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  font-size: 1.125rem;
-  letter-spacing: 3px;
+  justify-content: flex-start;
+  gap: 0.6rem;
+  padding: 0.45rem 0.25rem;
+  color: #44403c;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .parent .item:hover {
-  color: rgb(107 114 128);
+  color: #1c1917;
+}
+
+.parent .item::before {
+  content: '';
+  width: 1.25rem;
+  height: 1px;
+  background: transparent;
 }
 
 .parent .item.selected {
-  border-radius: 0.25rem;
-  background-color: rgb(229 231 235);
-  padding: 0.25rem 0.5rem;
+  background-color: transparent;
+  color: #1c1917;
+  font-weight: 600;
+}
+
+.parent .item.selected::before {
+  background: #1c1917;
+}
+
+.tool-row {
+  padding-top: 0.15rem;
+}
+
+.version {
+  padding-top: 0.5rem;
+  border-top: 1px solid #e7e5e4;
+  color: #78716c;
+  font-size: 0.75rem;
 }
 
 :global(html.dark) .parent .item {
-  color: rgb(156 163 175);
+  color: #d6d3d1;
+}
+
+:global(html.dark) .parent {
+  border-right-color: #44403c;
+}
+
+:global(html.dark) .brand {
+  border-bottom-color: #44403c;
+}
+
+:global(html.dark) .brand-kicker,
+:global(html.dark) .meta-label,
+:global(html.dark) .brand-copy,
+:global(html.dark) .version {
+  color: #a8a29e;
+}
+
+:global(html.dark) .brand-title,
+:global(html.dark) .parent .item:hover,
+:global(html.dark) .parent .item.selected {
+  color: #fafaf9;
+}
+
+:global(html.dark) .parent .item.selected::before {
+  background: #fafaf9;
+}
+
+:global(html.dark) .version {
+  border-top-color: #44403c;
+}
+
+@media screen and (max-width: 639px) {
+  .parent {
+    top: 0;
+    border-right: 0;
+    padding: 0;
+  }
+
+  .brand,
+  .meta-label,
+  .version {
+    display: none;
+  }
 }
 </style>

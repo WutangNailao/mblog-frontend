@@ -1,61 +1,66 @@
 <template>
   <div class="rd bg-white dark:bg-gray-7 p-2">
-    <n-form ref="formRef" :label-width="80" :model="state" label-placement="left" size="small" class="p-2">
-      <n-form-item label="标签" path="state.tag">
-        <n-select
-          v-model:value="state.tag"
+    <div class="flex flex-col gap-4 p-2">
+      <label class="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">
+        <span class="font-medium">标签</span>
+        <AppSelect
+          v-model="state.tag"
           :options="tags"
-          class="w-50"
-          clearable
-          label-field="name"
-          value-field="name"
+          option-label="name"
+          option-value="name"
           placeholder="选择标签"
+          clearable
         />
-      </n-form-item>
-      <n-form-item label="可见性" path="state.visibility">
-        <n-select
-          v-model:value="state.visibility"
+      </label>
+      <label class="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">
+        <span class="font-medium">可见性</span>
+        <AppSelect
+          v-model="state.visibility"
           :options="getVisbilitys()"
-          class="w-50"
-          clearable
+          option-label="label"
+          option-value="value"
           placeholder="选择可见性"
-        />
-      </n-form-item>
-      <n-form-item label="用户" path="state.visibility" v-if="userinfo.role === 'ADMIN'">
-        <n-select
-          v-model:value="state.userId"
-          :options="users"
-          class="w-50"
           clearable
-          placeholder="请选择用户"
-          label-field="displayName"
-          value-field="id"
         />
-      </n-form-item>
-      <n-form-item label="内容" path="state.search">
-        <n-input v-model:value="state.search" type="text" placeholder="支持全文搜索" clearable />
-      </n-form-item>
-
-      <n-form-item label="时间" path="state.name">
-        <n-date-picker v-model:formatted-value="state.range" type="daterange" value-format="yyyy-MM-dd" />
-      </n-form-item>
+      </label>
+      <label class="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200" v-if="userinfo.role === 'ADMIN'">
+        <span class="font-medium">用户</span>
+        <AppSelect
+          v-model="state.userId"
+          :options="users"
+          option-label="displayName"
+          option-value="id"
+          placeholder="请选择用户"
+          clearable
+        />
+      </label>
+      <label class="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">
+        <span class="font-medium">内容</span>
+        <InputText v-model="state.search" type="text" placeholder="支持全文搜索" />
+      </label>
+      <label class="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">
+        <span class="font-medium">时间</span>
+        <DatePicker v-model="searchRange" selection-mode="range" date-format="yy-mm-dd" :manual-input="false" />
+      </label>
 
       <div class="fr justify-center">
-        <n-button type="primary" class="px-6" size="small" @click="search">搜索</n-button>
+        <Button severity="primary" class="px-6" size="small" @click="search">搜索</Button>
       </div>
-    </n-form>
+    </div>
   </div>
 
   <div class="rd" v-if="state.totalPage >= 1">
     <div class="fc gap-1">
       <div class="fr justify-end my-2 gap-2 items-center">
         <div class="text-gray-5 text-xs">总共{{ state.totalRecord }}条</div>
-        <n-pagination
-          v-model:page="state.page"
-          :page-count="state.totalPage"
+        <Paginator
           v-if="state.totalPage > 1"
-          size="small"
-          @update-page="search"
+          :first="Math.max(state.page - 1, 0)"
+          :rows="1"
+          :total-records="Math.max(state.totalPage, 1)"
+          template="PrevPageLink CurrentPageReport NextPageLink"
+          current-page-report-template="{currentPage} / {totalPages}"
+          @page="onPage"
         />
       </div>
       <memo
@@ -67,12 +72,14 @@
       />
       <div class="fr justify-end my-2 gap-2 items-center">
         <div class="text-gray-5 text-xs">总共{{ state.totalRecord }}条</div>
-        <n-pagination
-          v-model:page="state.page"
-          :page-count="state.totalPage"
+        <Paginator
           v-if="state.totalPage > 1"
-          size="small"
-          @update-page="search"
+          :first="Math.max(state.page - 1, 0)"
+          :rows="1"
+          :total-records="Math.max(state.totalPage, 1)"
+          template="PrevPageLink CurrentPageReport NextPageLink"
+          current-page-report-template="{currentPage} / {totalPages}"
+          @page="onPage"
         />
       </div>
     </div>
@@ -85,6 +92,10 @@ import { type MemoDTO } from '@/types/memo'
 import type { Tag } from '@/types/tag'
 import type { User } from '@/types/user'
 import dayjs from 'dayjs'
+import Button from 'primevue/button'
+import DatePicker from 'primevue/datepicker'
+import InputText from 'primevue/inputtext'
+import Paginator from 'primevue/paginator'
 
 const userinfo = useStorage('userinfo', { token: '', role: '' })
 const tags = ref<Array<Tag>>([])
@@ -106,6 +117,17 @@ const state = reactive({
   totalPage: 0,
   userId: undefined,
   memos: Array<MemoDTO>(),
+})
+
+const searchRange = computed({
+  get: () => [dayjs(state.range[0]).toDate(), dayjs(state.range[1]).toDate()],
+  set: (value: Date[] | null) => {
+    const nextValue = Array.isArray(value) ? value : []
+    state.range = [
+      nextValue[0] ? dayjs(nextValue[0]).format('YYYY-MM-DD') : dayjs().subtract(3, 'y').format('YYYY-MM-DD'),
+      nextValue[1] ? dayjs(nextValue[1]).format('YYYY-MM-DD') : dayjs().endOf('month').format('YYYY-MM-DD'),
+    ]
+  },
 })
 
 onMounted(async () => {
@@ -149,4 +171,11 @@ const search = async () => {
     })
   })
 }
+
+const onPage = (event: { page: number }) => {
+  state.page = event.page + 1
+  search()
+}
 </script>
+
+<style scoped></style>

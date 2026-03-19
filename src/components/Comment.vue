@@ -71,19 +71,9 @@
       </div>
       <div class="right">
         <div class="floor">#{{ props.index + 1 }}</div>
-        <n-popconfirm
-          :show-icon="false"
-          v-if="userinfo.role === 'ADMIN'"
-          @positive-click="removeComment(props.comment.id)"
-          negative-text="取消"
-          positive-text="确定"
-        >
-          <template #trigger>
-            <div class="remove">
-              <div class="i-carbon:trash-can"></div>
-            </div>
-          </template>
-        </n-popconfirm>
+        <div v-if="userinfo.role === 'ADMIN'" class="remove" @click="confirmRemoveComment(props.comment.id)">
+          <div class="i-carbon:trash-can"></div>
+        </div>
       </div>
     </div>
     <div class="p-2 dark:text-white md-content" v-html="commentContent"></div>
@@ -92,6 +82,7 @@
 
 <script setup lang="ts">
 import type { CommentDTO } from '@/types/comment'
+import { useAppMessage } from '@/ui/useAppMessage'
 import dayjs from 'dayjs'
 import { marked } from 'marked'
 import { mangle } from 'marked-mangle'
@@ -107,15 +98,20 @@ const props = defineProps<{
   index: number
 }>()
 const userinfo = useStorage('userinfo', { role: '' })
+const message = useAppMessage()
 
 const commentContent = ref(marked.parse(props.comment.content))
+
+const confirmRemoveComment = async (id: number) => {
+  if (!window.confirm('确认删除这条评论？')) return
+  await removeComment(id)
+}
 
 const removeComment = async (id: number) => {
   const { error } = await useMyFetch('/api/comment/remove?id=' + id)
     .post()
     .json()
   if (!error.value) {
-    const { message } = createDiscreteApi(['message'])
     message.success('删除评论成功')
     commetSavedBus.emit()
   }
